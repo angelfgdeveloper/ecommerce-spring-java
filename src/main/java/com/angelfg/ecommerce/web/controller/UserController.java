@@ -1,0 +1,37 @@
+package com.angelfg.ecommerce.web.controller;
+
+import com.angelfg.ecommerce.persistence.entity.UserEntity;
+import com.angelfg.ecommerce.persistence.repository.UserRepository;
+import com.angelfg.ecommerce.service.dto.UserDTO;
+import com.angelfg.ecommerce.service.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+
+    public UserController() {}
+
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<UserEntity> add(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userDTO, "/api/users"));
+    }
+
+}
