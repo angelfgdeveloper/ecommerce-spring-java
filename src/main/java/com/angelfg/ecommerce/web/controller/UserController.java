@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static com.angelfg.ecommerce.service.dto.UserDTO.validUserDTO;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -19,19 +23,22 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private UserRepository userRepository;
 
     public UserController() {}
 
     @GetMapping
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<UserEntity>> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
     }
 
     @PostMapping
     public ResponseEntity<UserEntity> add(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userDTO, "/api/users"));
+        String path = "/api/users";
+        validUserDTO(userDTO, path);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userDTO, path));
     }
 
 }

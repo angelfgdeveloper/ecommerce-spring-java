@@ -32,12 +32,13 @@ public class UserService {
 
     public UserEntity save(UserDTO userDTO, String path) {
 
-        if (!existUserByEmail(userDTO.getEmail(), path)) {
-            UserEntity userEntity = userMapper.toEntity(userDTO);
-            return userRepository.save(userEntity);
+        if (existUserByEmail(userDTO.getEmail(), path)) {
+            throw new CustomException("Ya existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST, path);
         }
 
-        throw new CustomException("Ya existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST, path);
+        UserEntity userEntity = userMapper.toEntity(userDTO);
+
+        return userRepository.save(userEntity);
     }
 
     public boolean existUserByEmail(String email, String path) {

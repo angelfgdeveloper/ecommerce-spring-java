@@ -40,9 +40,9 @@ public class UserEntity {
     private String password;
 
     @Column(nullable = false, columnDefinition = "boolean")
-    private Boolean locked;
+    private Boolean locked = false;
 
     @Column(nullable = false, columnDefinition = "boolean")
-    private Boolean disabled;
+    private Boolean disabled = false;
 
 }
