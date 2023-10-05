@@ -1,7 +1,6 @@
 package com.angelfg.ecommerce.web.controller;
 
 import com.angelfg.ecommerce.persistence.entity.UserEntity;
-import com.angelfg.ecommerce.persistence.repository.UserRepository;
 import com.angelfg.ecommerce.service.dto.UserDTO;
 import com.angelfg.ecommerce.service.user.UserService;
 import org.slf4j.Logger;
@@ -23,9 +22,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     public UserController() {}
 
