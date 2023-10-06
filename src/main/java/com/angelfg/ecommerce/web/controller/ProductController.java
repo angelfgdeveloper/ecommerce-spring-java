@@ -1,14 +1,12 @@
 package com.angelfg.ecommerce.web.controller;
 
-import com.angelfg.ecommerce.persistence.entity.ProductEntity;
-import com.angelfg.ecommerce.persistence.entity.UserEntity;
+import com.angelfg.ecommerce.service.dto.ListProductDTO;
 import com.angelfg.ecommerce.service.dto.ProductDTO;
 import com.angelfg.ecommerce.service.dto.ProductResponseDTO;
 import com.angelfg.ecommerce.service.product.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,11 +36,22 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<ProductResponseDTO>> getAllAvailable(
+    public ResponseEntity<ListProductDTO> getProductsPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int elements
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getAllAvailable(page, elements));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductsPage(page, elements));
+    }
+
+    @GetMapping("/list-order")
+    public ResponseEntity<ListProductDTO> getProductsPageSort(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int elements,
+            @RequestParam(defaultValue = "idProduct") String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortDirection
+    ) {
+        String path = "/api/products/list-order";
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductsPageSort(page, elements, sortBy, sortDirection, path));
     }
 
 }

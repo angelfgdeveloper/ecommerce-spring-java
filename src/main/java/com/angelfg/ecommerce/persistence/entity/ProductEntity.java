@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Arrays;
+
 @Entity
 @Table(name = "product")
 @Getter
@@ -34,8 +36,8 @@ public class ProductEntity {
     @Column(nullable = false)
     private Boolean available = false;
 
-    @ManyToOne
-    @JoinColumn(name = "id_user", insertable = false, updatable = false)
-    private UserEntity user;
+//    @ManyToOne
+//    @JoinColumn(name = "id_user", insertable = false, updatable = false)
+//    private UserEntity user;
 
 }
