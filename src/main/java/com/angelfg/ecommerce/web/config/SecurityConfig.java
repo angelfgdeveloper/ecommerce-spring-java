@@ -23,8 +23,11 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeRequests()
 //                .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // Permita todos los GET sin auth basic
-                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll() // Permita todos especificos GET sin auth basic
-                .requestMatchers(HttpMethod.PUT).denyAll() // Deniega todos los metodos PUT
+//                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll() // Permita todos especificos GET sin auth basic
+                .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("ADMIN", "USER")// Permita consumir con los ROLES de admin y user
+                .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN") // Solo el admin puede crear products
+                .requestMatchers(HttpMethod.PUT).hasRole("ADMIN") // Solo puede actualizar con el Role de Admin
+                .requestMatchers(HttpMethod.DELETE).denyAll() // Deniega todos los metodos DELETE
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -46,11 +49,17 @@ public class SecurityConfig {
 
         UserDetails admin = User.builder()
                 .username("admin")
-                .password(passwordEncoder().encode("admin"))
+                .password(passwordEncoder().encode("admin123"))
                 .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(admin);
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("user123"))
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, user);
     }
 
     /**
