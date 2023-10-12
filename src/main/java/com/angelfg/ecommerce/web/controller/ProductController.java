@@ -31,6 +31,7 @@ public class ProductController {
     }
 
     @GetMapping
+    // @CrossOrigin(origins = "http://localhost:4200") // Para decirle que este dominio hace la peticion
     public ResponseEntity<List<ProductResponseDTO>> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getAll());
     }
