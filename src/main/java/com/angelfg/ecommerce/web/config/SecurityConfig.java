@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN") // Solo el admin puede crear products
                 .requestMatchers(HttpMethod.PUT).hasRole("ADMIN") // Solo puede actualizar con el Role de Admin
                 .requestMatchers(HttpMethod.DELETE).denyAll() // Deniega todos los metodos DELETE
+                .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -43,24 +44,24 @@ public class SecurityConfig {
      * Generamos usuarios en memoria y ya no generara la contraseña autogenerada
      * @return
      */
-    @Bean
-    public UserDetailsService memoryUsers() {
-        // Spring necesita que los password esten hasehadas
-
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin123"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("user123"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, user);
-    }
+//    @Bean
+//    public UserDetailsService memoryUsers() {
+//        // Spring necesita que los password esten hasehadas
+//
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password(passwordEncoder().encode("admin123"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .password(passwordEncoder().encode("user123"))
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(admin, user);
+//    }
 
     /**
      * Convierte el texto en un bcrypt (contraseña hasheada)

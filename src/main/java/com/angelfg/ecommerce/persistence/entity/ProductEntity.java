@@ -9,7 +9,7 @@ import lombok.ToString;
 import java.util.Arrays;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 @Getter
 @Setter
 @NoArgsConstructor

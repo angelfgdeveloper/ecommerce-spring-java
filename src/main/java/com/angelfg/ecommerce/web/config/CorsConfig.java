@@ -11,7 +11,6 @@ import java.util.Arrays;
 @Configuration
 public class CorsConfig {
 
-
     /**
      * Configuraciones de cors para permitir o denegar los origines o dominios que no esten en nuestro control
      * @return

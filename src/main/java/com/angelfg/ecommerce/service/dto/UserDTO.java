@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
-import static com.angelfg.ecommerce.util.Validaciones.isValidEmail;
+import static com.angelfg.ecommerce.util.Validations.isValidEmail;
 
 @Data
 @ToString

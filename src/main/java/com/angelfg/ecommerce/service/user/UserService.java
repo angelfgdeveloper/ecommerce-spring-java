@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
+import static com.angelfg.ecommerce.util.GenerateHash.passwordEncoder;
+
 @Controller
 public class UserService {
 
@@ -35,6 +37,9 @@ public class UserService {
         if (existUserByEmail(userDTO.getEmail(), path)) {
             throw new CustomException("Ya existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST, path);
         }
+
+        String hashPassword = passwordEncoder().encode(userDTO.getPassword());
+        userDTO.setPassword(hashPassword);
 
         UserEntity userEntity = userMapper.toEntity(userDTO);
 
