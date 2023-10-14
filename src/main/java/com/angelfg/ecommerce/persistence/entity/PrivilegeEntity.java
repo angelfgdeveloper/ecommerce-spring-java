@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -25,9 +24,8 @@ public class PrivilegeEntity {
     @Column(nullable = false)
     private String name;
 
-    @CreatedDate
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime created_at;
+    private LocalDateTime created_at = LocalDateTime.now();
 
     @Column(nullable = false, columnDefinition = "boolean")
     private Boolean disabled = false;

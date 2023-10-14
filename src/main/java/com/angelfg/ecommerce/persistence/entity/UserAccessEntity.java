@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -22,9 +21,20 @@ public class UserAccessEntity {
     @Column(name = "id_user_access", nullable = false)
     private Long idUserAccess;
 
-    @CreatedDate
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
+
+    @ManyToOne
+    @JoinColumn(name = "privilege_id")
+    private PrivilegeEntity privilege;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime created_at;
+    private LocalDateTime created_at = LocalDateTime.now();
 
     @Column(nullable = false, columnDefinition = "boolean")
     private Boolean disabled = false;
