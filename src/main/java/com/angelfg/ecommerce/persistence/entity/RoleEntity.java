@@ -27,7 +27,7 @@ public class RoleEntity {
 
     @CreatedDate
     @Column(nullable = false, columnDefinition = "timestamp")
-    private LocalDateTime created_at;
+    private LocalDateTime created_at = LocalDateTime.now();
 
     @Column(nullable = false, columnDefinition = "boolean")
     private Boolean disabled = false;

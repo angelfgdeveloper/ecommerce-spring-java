@@ -35,5 +35,4 @@ public class PrivilegeController {
         return ResponseEntity.status(HttpStatus.OK).body(privilegeService.getAll(path));
     }
 
-
 }
