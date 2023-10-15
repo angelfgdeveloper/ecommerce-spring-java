@@ -4,6 +4,7 @@ import com.angelfg.ecommerce.persistence.entity.UserEntity;
 import com.angelfg.ecommerce.persistence.mapper.UserMapper;
 import com.angelfg.ecommerce.persistence.repository.UserRepository;
 import com.angelfg.ecommerce.service.dto.UserDTO;
+import com.angelfg.ecommerce.service.dto.UserResponseDTO;
 import com.angelfg.ecommerce.service.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,5 +52,16 @@ public class UserService {
             throw new CustomException("El correo ingresado es inválido", HttpStatus.BAD_REQUEST, path);
 
         return userRepository.existsByEmail(email);
+    }
+
+    public UserEntity findUserById(Long id, String path) {
+        if (id == null)
+            throw new CustomException("El id del usuario ingresado es inválido", HttpStatus.BAD_REQUEST, path);
+
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public UserResponseDTO transformUserEntityToDTO(UserEntity user) {
+        return userMapper.toResponseDTO(user);
     }
 }

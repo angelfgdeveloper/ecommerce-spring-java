@@ -56,4 +56,15 @@ public class PrivilegeService {
             throw new CustomException("Hubo un error al intentar obtener todos los privilegios", HttpStatus.BAD_REQUEST, path);
         }
     }
+
+    public PrivilegeEntity findPrivilegeById(Long id, String path) {
+        if (id == null)
+            throw new CustomException("El id del privilegio ingresado es inválido", HttpStatus.BAD_REQUEST, path);
+
+        return privilegeRepository.findById(id).orElse(null);
+    }
+
+    public PrivilegeResponseDTO transformPrivilegeEntityToDTO(PrivilegeEntity privilege) {
+        return privilegeMapper.toResponseDTO(privilege);
+    }
 }

@@ -1,10 +1,7 @@
 package com.angelfg.ecommerce.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +9,9 @@ import java.time.LocalDateTime;
 @Table(name = "user_access")
 @Getter
 @Setter
-@NoArgsConstructor
+@AllArgsConstructor
 @ToString
+@NoArgsConstructor
 public class UserAccessEntity {
 
     @Id
@@ -39,4 +37,9 @@ public class UserAccessEntity {
     @Column(nullable = false, columnDefinition = "boolean")
     private Boolean disabled = false;
 
+    public UserAccessEntity(RoleEntity role, PrivilegeEntity privilege, UserEntity user) {
+        this.role = role;
+        this.privilege = privilege;
+        this.user = user;
+    }
 }

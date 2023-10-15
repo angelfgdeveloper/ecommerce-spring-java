@@ -57,4 +57,14 @@ public class RoleService {
         return roleRepository.existsByName(name);
     }
 
+    public RoleEntity findRoleById(Long id, String path) {
+        if (id == null)
+            throw new CustomException("El id del rol ingresado es inválido", HttpStatus.BAD_REQUEST, path);
+
+        return roleRepository.findById(id).orElse(null);
+    }
+
+    public RoleResponseDTO transformRoleEntityToDTO(RoleEntity role) {
+        return roleMapper.toResponseDTO(role);
+    }
 }
