@@ -29,11 +29,11 @@ public class UserService {
 
     public UserService() {}
 
-    public List<UserEntity> getAll() {
-        return userRepository.findAll();
+    public List<UserResponseDTO> getAll() {
+        return userRepository.findAll().stream().map(userMapper::toResponseDTO).toList();
     }
 
-    public UserEntity save(UserDTO userDTO, String path) {
+    public UserResponseDTO save(UserDTO userDTO, String path) {
 
         if (existUserByEmail(userDTO.getEmail(), path)) {
             throw new CustomException("Ya existe un usuario con esas credenciales", HttpStatus.BAD_REQUEST, path);
@@ -44,7 +44,9 @@ public class UserService {
 
         UserEntity userEntity = userMapper.toEntity(userDTO);
 
-        return userRepository.save(userEntity);
+        UserEntity newUserEntity = userRepository.save(userEntity);
+
+        return userMapper.toResponseDTO(newUserEntity);
     }
 
     public boolean existUserByEmail(String email, String path) {
