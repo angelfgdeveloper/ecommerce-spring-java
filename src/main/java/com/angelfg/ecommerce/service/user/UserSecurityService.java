@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class UserSecurityService implements UserDetailsService {
 
@@ -39,18 +37,19 @@ public class UserSecurityService implements UserDetailsService {
             throw new UsernameNotFoundException("Correo " + email + " no encontrado");
         }
 
-        List<String> nameRolesByUser = userAccessService.findAccessByRoleIdOfUserId(userEntity.getIdUser());
+//        List<String> nameRolesByUser = userAccessService.findAccessByRoleIdOfUserId(userEntity.getIdUser());
+        String[] nameRolesByUser = userAccessService.findAccessByRoleIdOfUserId(userEntity.getIdUser()).toArray(String[]::new);
 
-        if (nameRolesByUser == null || nameRolesByUser.isEmpty()) {
+        if (nameRolesByUser == null || nameRolesByUser.length == 0) {
             throw new UsernameNotFoundException("Hubo un error al intentar encontrar los roles del usuario");
         }
 
-        String[] rolesByUser = nameRolesByUser.toArray(new String[0]);
+//        String[] rolesByUser = nameRolesByUser.toArray(new String[0]);
 
         return User.builder()
                 .username(userEntity.getEmail())
                 .password(userEntity.getPassword())
-                .roles(rolesByUser)
+                .roles(nameRolesByUser)
                 .accountLocked(userEntity.getLocked())
                 .disabled(userEntity.getDisabled())
                 .build();
