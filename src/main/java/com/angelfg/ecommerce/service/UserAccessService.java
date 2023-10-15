@@ -108,4 +108,33 @@ public class UserAccessService {
 //        return rolesByUser.stream().map(roleByUser -> roleByUser.getName()).distinct().toList();
         return rolesByUser.stream().map(RoleEntity::getName).distinct().toList();
     }
+
+    public UserAccessRolesAndPrivilegesDTO findUserAccessByRoleAndByPrivilegeOfUserId(Long idUser) {
+        String path = "/api/user-access";
+
+        List<UserAccessEntity> userAccessEntity = userAccessRepository.existsUserId(idUser);
+
+        if (userAccessEntity == null || userAccessEntity.isEmpty()) throw new CustomException("El usuario no contiene accesos", HttpStatus.BAD_REQUEST, path);
+
+        List<RoleEntity> roleEntities = userAccessEntity.stream().map(UserAccessEntity::getRole).toList();
+
+        if (roleEntities == null || roleEntities.isEmpty()) throw new CustomException("El usuario no contiene roles", HttpStatus.BAD_REQUEST, path);
+
+        List<PrivilegeEntity> privilegeEntities = userAccessEntity.stream().map(UserAccessEntity::getPrivilege).toList();
+
+        if (privilegeEntities == null || privilegeEntities.isEmpty()) throw new CustomException("El usuario no contiene privilegios", HttpStatus.BAD_REQUEST, path);
+
+        List<RoleEntity> rolesByUser = roleEntities.stream().map(role -> roleService.findRoleById(role.getIdRole(), path)).toList();
+
+        if (rolesByUser == null || rolesByUser.isEmpty()) throw new CustomException("Los roles del usuario no existen", HttpStatus.BAD_REQUEST, path);
+
+        List<PrivilegeEntity> privilegesByUser = privilegeEntities.stream().map(privilege -> privilegeService.findPrivilegeById(privilege.getIdPrivilege(), path)).toList();
+
+        if (privilegesByUser == null || privilegesByUser.isEmpty()) throw new CustomException("Los privilegios del usuario no existen", HttpStatus.BAD_REQUEST, path);
+
+        return new UserAccessRolesAndPrivilegesDTO(
+            rolesByUser.stream().map(RoleEntity::getName).distinct().toList().toArray(String[]::new),
+            privilegesByUser.stream().map(PrivilegeEntity::getName).distinct().toList().toArray(String[]::new)
+        );
+    }
 }

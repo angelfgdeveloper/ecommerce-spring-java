@@ -1,10 +1,12 @@
 package com.angelfg.ecommerce.service;
 
 import com.angelfg.ecommerce.persistence.entity.PrivilegeEntity;
+import com.angelfg.ecommerce.persistence.entity.RoleEntity;
 import com.angelfg.ecommerce.persistence.mapper.PrivilegeMapper;
 import com.angelfg.ecommerce.persistence.repository.PrivilegeRepository;
 import com.angelfg.ecommerce.service.dto.PrivilegeDTO;
 import com.angelfg.ecommerce.service.dto.PrivilegeResponseDTO;
+import com.angelfg.ecommerce.service.dto.RoleResponseDTO;
 import com.angelfg.ecommerce.service.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,4 +69,5 @@ public class PrivilegeService {
     public PrivilegeResponseDTO transformPrivilegeEntityToDTO(PrivilegeEntity privilege) {
         return privilegeMapper.toResponseDTO(privilege);
     }
+
 }

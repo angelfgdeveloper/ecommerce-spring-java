@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE).denyAll() // Deniega todos los metodos DELETE
                 .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/role").hasAuthority("ACCESS_VIEW_ROLES") // Es importante donde esta ubicado, porque si hay un admin antes que tenga privilegios con una ruta similar seguira entrando
+                .requestMatchers(HttpMethod.GET, "/api/privilege").hasAuthority("ACCESS_VIEW_PRIVILEGES")
                 .anyRequest()
                 .authenticated()
                 .and()
