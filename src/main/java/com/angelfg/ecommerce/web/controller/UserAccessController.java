@@ -2,8 +2,6 @@ package com.angelfg.ecommerce.web.controller;
 
 import com.angelfg.ecommerce.persistence.entity.UserAccessEntity;
 import com.angelfg.ecommerce.service.UserAccessService;
-import com.angelfg.ecommerce.service.dto.PrivilegeDTO;
-import com.angelfg.ecommerce.service.dto.PrivilegeResponseDTO;
 import com.angelfg.ecommerce.service.dto.UserAccessDTO;
 import com.angelfg.ecommerce.service.dto.UserAccessResponseDTO;
 import org.slf4j.Logger;

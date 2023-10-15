@@ -24,11 +24,12 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // Permita todos los GET sin auth basic
 //                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll() // Permita todos especificos GET sin auth basic
-                .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("ADMIN", "USER")// Permita consumir con los ROLES de admin y user
+                .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("ADMIN", "USER") // Permita consumir con los ROLES de admin y user
                 .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN") // Solo el admin puede crear products
                 .requestMatchers(HttpMethod.PUT).hasRole("ADMIN") // Solo puede actualizar con el Role de Admin
                 .requestMatchers(HttpMethod.DELETE).denyAll() // Deniega todos los metodos DELETE
                 .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

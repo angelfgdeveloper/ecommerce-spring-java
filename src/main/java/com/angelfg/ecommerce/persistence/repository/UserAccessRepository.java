@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserAccessRepository extends ListCrudRepository<UserAccessEntity, Long> {
@@ -21,4 +22,10 @@ public interface UserAccessRepository extends ListCrudRepository<UserAccessEntit
         @Param("idPrivilege") Long idPrivilege
     );
 
+    @Query(
+        value = "SELECT ua FROM UserAccessEntity ua WHERE ua.user.idUser = :idUser AND " +
+                "ua.disabled = false AND ua.role IS NOT NULL AND ua.privilege IS NOT NULL",
+        nativeQuery = false
+    )
+    List<UserAccessEntity> existsUserId(@Param("idUser") Long idUser);
 }

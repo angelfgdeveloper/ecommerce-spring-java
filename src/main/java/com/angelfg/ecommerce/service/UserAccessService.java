@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -93,4 +94,18 @@ public class UserAccessService {
         return (userAccessEntity == null) ? false : true;
     }
 
+    public List<String> findAccessByRoleIdOfUserId(Long idUser) {
+        String path = "/api/user-access";
+        List<UserAccessEntity> userAccessEntity = userAccessRepository.existsUserId(idUser);
+
+        if (userAccessEntity == null || userAccessEntity.isEmpty()) throw new CustomException("El usuario no contiene accesos", HttpStatus.BAD_REQUEST, path);
+
+        List<RoleEntity> roleEntities = userAccessEntity.stream().map(role -> role.getRole()).toList();
+
+        if (roleEntities == null || roleEntities.isEmpty()) throw new CustomException("El usuario no contiene roles", HttpStatus.BAD_REQUEST, path);
+
+        List<RoleEntity> rolesByUser = roleEntities.stream().map(role -> roleService.findRoleById(role.getIdRole(), path)).toList();
+
+        return rolesByUser.stream().map(roleByUser -> roleByUser.getName()).distinct().toList();
+    }
 }

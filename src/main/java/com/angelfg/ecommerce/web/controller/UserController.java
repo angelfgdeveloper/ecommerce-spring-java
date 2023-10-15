@@ -1,6 +1,5 @@
 package com.angelfg.ecommerce.web.controller;
 
-import com.angelfg.ecommerce.persistence.entity.UserEntity;
 import com.angelfg.ecommerce.service.dto.UserDTO;
 import com.angelfg.ecommerce.service.dto.UserResponseDTO;
 import com.angelfg.ecommerce.service.user.UserService;
