@@ -114,7 +114,7 @@ public class UserAccessService {
 
         List<UserAccessEntity> userAccessEntity = userAccessRepository.existsUserId(idUser);
 
-        if (userAccessEntity == null || userAccessEntity.isEmpty()) throw new CustomException("El usuario no contiene accesos", HttpStatus.BAD_REQUEST, path);
+        if (userAccessEntity == null || userAccessEntity.isEmpty()) return new UserAccessRolesAndPrivilegesDTO(new String[] {}, new String[] {});
 
         List<RoleEntity> roleEntities = userAccessEntity.stream().map(UserAccessEntity::getRole).toList();
 

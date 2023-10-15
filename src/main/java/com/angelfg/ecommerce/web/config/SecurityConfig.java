@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity(securedEnabled = true) // habilitar para poder controlar las anotaciones desde los services
 public class SecurityConfig {
 
     @Bean
@@ -25,7 +27,7 @@ public class SecurityConfig {
 //                .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // Permita todos los GET sin auth basic
 //                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll() // Permita todos especificos GET sin auth basic
                 .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("ADMIN", "USER") // Permita consumir con los ROLES de admin y user
-                .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN") // Solo el admin puede crear products
+                .requestMatchers(HttpMethod.POST, "/api/products").permitAll() //.hasRole("ADMIN") // Solo el admin puede crear products
                 .requestMatchers(HttpMethod.PUT).hasRole("ADMIN") // Solo puede actualizar con el Role de Admin
                 .requestMatchers(HttpMethod.DELETE).denyAll() // Deniega todos los metodos DELETE
                 .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()

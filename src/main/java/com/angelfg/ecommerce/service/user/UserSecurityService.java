@@ -50,13 +50,13 @@ public class UserSecurityService implements UserDetailsService {
         String[] nameRolesByUser = userAccessRolesAndPrivilegesDTO.getRoles();
         String[] namePrivilegesByUser = userAccessRolesAndPrivilegesDTO.getPrivileges();
 
-        if (nameRolesByUser == null || nameRolesByUser.length == 0) {
-            throw new UsernameNotFoundException("Hubo un error al intentar encontrar los roles del usuario");
-        }
-
-        if (namePrivilegesByUser == null || namePrivilegesByUser.length == 0) {
-            throw new UsernameNotFoundException("Hubo un error al intentar encontrar los privilegios del usuario");
-        }
+//        if (nameRolesByUser == null || nameRolesByUser.length == 0) {
+//            throw new UsernameNotFoundException("Hubo un error al intentar encontrar los roles del usuario");
+//        }
+//
+//        if (namePrivilegesByUser == null || namePrivilegesByUser.length == 0) {
+//            throw new UsernameNotFoundException("Hubo un error al intentar encontrar los privilegios del usuario");
+//        }
 
 //        String[] rolesByUser = nameRolesByUser.toArray(new String[0]);
 

@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -38,6 +39,7 @@ public class ProductService {
 
     public ProductService() {}
 
+    @Secured("ROLE_USER") // Protecciones desde el service, se tiene que configurar el SecurityConfig ocn @EnableMethodSecurity
     public ProductResponseDTO save(ProductDTO productDTO, String path) {
         ProductEntity product = productMapper.toEntity(productDTO);
         ProductEntity newProduct = productRepository.save(product);
