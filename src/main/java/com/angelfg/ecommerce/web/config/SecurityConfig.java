@@ -3,7 +3,9 @@ package com.angelfg.ecommerce.web.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -34,6 +36,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/role").hasAuthority("ACCESS_VIEW_ROLES") // Es importante donde esta ubicado, porque si hay un admin antes que tenga privilegios con una ruta similar seguira entrando
                 .requestMatchers(HttpMethod.GET, "/api/privilege").hasAuthority("ACCESS_VIEW_PRIVILEGES")
+                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -77,6 +80,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
 }
