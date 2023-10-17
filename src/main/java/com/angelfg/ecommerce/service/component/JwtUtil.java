@@ -2,6 +2,7 @@ package com.angelfg.ecommerce.service.component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,10 +21,29 @@ public class JwtUtil {
 
         return JWT.create()
                 .withSubject(email)
-                .withIssuer("com.angelfg.ecommerce") // Quien lo esta integrando
+                .withIssuer("angelfg.ecommerce") // Quien lo esta integrando
                 .withIssuedAt(currentDate) // Fecha actual
                 .withExpiresAt(new Date(currentDate.getTime() + TimeUnit.HOURS.toMillis(6))) // expira el token en 6 horas
                 .sign(ALGORITHM); // firmar nuestro token
+    }
+
+    public boolean isValidToken(String token) {
+        try {
+            JWT.require(ALGORITHM)
+                    .build()
+                    .verify(token);
+
+            return true;
+        } catch(JWTVerificationException e) {
+            return false;
+        }
+    }
+
+    public String getEmail(String token) {
+        return JWT.require(ALGORITHM)
+                .build()
+                .verify(token)
+                .getSubject();
     }
 
 }
