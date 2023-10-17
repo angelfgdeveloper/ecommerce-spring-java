@@ -66,4 +66,8 @@ public class UserService {
     public UserResponseDTO transformUserEntityToDTO(UserEntity user) {
         return userMapper.toResponseDTO(user);
     }
+
+    public UserResponseDTO findByEmail(String email) {
+        return userMapper.toResponseDTO(userRepository.findByEmail(email));
+    }
 }

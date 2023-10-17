@@ -2,6 +2,7 @@ package com.angelfg.ecommerce.web.controller;
 
 import com.angelfg.ecommerce.service.AuthService;
 import com.angelfg.ecommerce.service.dto.LoginDTO;
+import com.angelfg.ecommerce.service.dto.UserWithTokenResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ public class AuthController {
     public AuthController() {}
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<UserWithTokenResponseDTO> login(@RequestBody LoginDTO loginDTO) {
         String path = "/api/auth/login";
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.login(loginDTO, path));
     }
 
     @GetMapping("/regenerate-token")
-    public ResponseEntity<?> regenerateToken(
+    public ResponseEntity<UserWithTokenResponseDTO> regenerateToken(
         @RequestHeader("Authorization") String authorizationHeader
     ) {
         String path = "/api/auth/regenerate-token";

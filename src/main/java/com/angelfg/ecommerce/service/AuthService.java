@@ -1,10 +1,11 @@
 package com.angelfg.ecommerce.service;
 
-import com.angelfg.ecommerce.persistence.repository.UserRepository;
 import com.angelfg.ecommerce.service.component.JwtUtil;
 import com.angelfg.ecommerce.service.dto.LoginDTO;
+import com.angelfg.ecommerce.service.dto.UserResponseDTO;
+import com.angelfg.ecommerce.service.dto.UserWithTokenResponseDTO;
 import com.angelfg.ecommerce.service.exception.CustomException;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.angelfg.ecommerce.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +15,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 public class AuthService {
     private final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -33,30 +30,28 @@ public class AuthService {
 
     public AuthService() {}
 
-    public Object login(LoginDTO loginDTO, String path) {
+    public UserWithTokenResponseDTO login(LoginDTO loginDTO, String path) {
 
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(
             loginDTO.getEmail(),
             loginDTO.getPassword()
         );
 
-        log.debug("LOGIN ANTES => " + login.toString());
-
         Authentication authentication = authenticationManager.authenticate(login);
-        log.debug("LOGIN DESPUES => " + authentication.toString());
 
-        log.debug("AUTENTICATION => " + authentication.isAuthenticated());
-        log.debug("AUTENTICATION EMAIL => " + authentication.getPrincipal());
+        String token = jwtUtil.create(loginDTO.getEmail());
+        String email = jwtUtil.getEmail(token);
 
-        String jwt = jwtUtil.create(loginDTO.getEmail());
+        if (email == null || email.isEmpty()) {
+            throw new CustomException("Hubo un error al intentar realizar el login", HttpStatus.BAD_REQUEST, path);
+        }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", jwt);
+        UserResponseDTO userResponseDTO = userService.findByEmail(email);
 
-        return response;
+        return new UserWithTokenResponseDTO(userResponseDTO, token);
     }
 
-    public Object reNewOldToken(String authorizationHeader, String path) {
+    public UserWithTokenResponseDTO reNewOldToken(String authorizationHeader, String path) {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String oldToken = authorizationHeader.split(" ")[1].trim();
@@ -73,10 +68,9 @@ public class AuthService {
 
             String newToken = jwtUtil.create(email);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", newToken);
+            UserResponseDTO userResponseDTO = userService.findByEmail(email);
 
-            return response;
+            return new UserWithTokenResponseDTO(userResponseDTO, newToken);
         } else {
             throw new CustomException("El token no es válido", HttpStatus.UNAUTHORIZED, path);
         }
