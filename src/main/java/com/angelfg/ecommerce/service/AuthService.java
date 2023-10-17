@@ -4,6 +4,7 @@ import com.angelfg.ecommerce.persistence.repository.UserRepository;
 import com.angelfg.ecommerce.service.component.JwtUtil;
 import com.angelfg.ecommerce.service.dto.LoginDTO;
 import com.angelfg.ecommerce.service.exception.CustomException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,4 +55,32 @@ public class AuthService {
 
         return response;
     }
+
+    public Object reNewOldToken(String authorizationHeader, String path) {
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String oldToken = authorizationHeader.split(" ")[1].trim();
+
+            if (!jwtUtil.isValidToken(oldToken)) {
+                throw new CustomException("El token no es válido", HttpStatus.UNAUTHORIZED, path);
+            }
+
+            String email = jwtUtil.getEmail(oldToken);
+
+            if (email == null || email.isEmpty()) {
+                throw new CustomException("Hubo un problema al actualizar el token", HttpStatus.BAD_REQUEST, path);
+            }
+
+            String newToken = jwtUtil.create(email);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", newToken);
+
+            return response;
+        } else {
+            throw new CustomException("El token no es válido", HttpStatus.UNAUTHORIZED, path);
+        }
+
+    }
+
 }
