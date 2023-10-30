@@ -11,6 +11,7 @@ import com.angelfg.ecommerce.service.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,7 @@ public class ProductService {
         return productMapper.toEntityResponse(newProduct);
     }
 
+    @Cacheable("getAll")
     public List<ProductResponseDTO> getAll() {
         return productRepository.findAll().stream().map(productMapper::toEntityResponse).toList();
     }
