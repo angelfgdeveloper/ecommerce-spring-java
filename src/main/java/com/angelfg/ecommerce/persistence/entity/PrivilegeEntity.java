@@ -16,8 +16,13 @@ import java.time.LocalDateTime;
 @ToString
 public class PrivilegeEntity {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id_privilege", nullable = false)
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "privileges_sequence")
+    @SequenceGenerator(name = "privileges_sequence", sequenceName = "privileges_sequence", allocationSize = 1)
     @Column(name = "id_privilege", nullable = false)
     private Long idPrivilege;
 

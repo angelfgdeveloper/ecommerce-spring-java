@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <!-- Cambio para modificar la secuencia -->
+    <changeSet id="modify_sequence_product" author="Angel">
+        <sql>
+            <!-- Modifica la secuencia existente -->
+            ALTER SEQUENCE products_id_seq RENAME TO products_sequence;
+        </sql>
+    </changeSet>
+
+    <changeSet id="modify_sequence_user" author="Angel">
+        <sql>
+            ALTER SEQUENCE users_id_user_seq RENAME TO users_sequence;
+        </sql>
+    </changeSet>
+
+    <changeSet id="modify_sequence_user_access" author="Angel">
+        <sql>
+            ALTER SEQUENCE user_access_id_user_access_seq RENAME TO user_access_sequence;
+        </sql>
+    </changeSet>
+
+    <changeSet id="modify_sequence_role" author="Angel">
+        <sql>
+            ALTER SEQUENCE roles_id_role_seq RENAME TO roles_sequence;
+        </sql>
+    </changeSet>
+
+    <changeSet id="modify_sequence_privilege" author="Angel">
+        <sql>
+            ALTER SEQUENCE privileges_id_privilege_seq RENAME TO privileges_sequence;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

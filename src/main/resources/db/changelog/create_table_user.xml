@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="create_table_user" author="Angel">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users" schemaName="public" />
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="users_sequence" incrementBy="1" startValue="1" />
+
+        <createTable tableName="users">
+
+            <column name="id_user" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="first_name" type="VARCHAR(255)" />
+
+            <column name="last_name" type="VARCHAR(255)" />
+
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true" />
+            </column>
+
+            <column name="password" type="VARCHAR(200)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="locked" type="BOOLEAN">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="disabled" type="BOOLEAN">
+                <constraints nullable="false" />
+            </column>
+
+        </createTable>
+
+        <addPrimaryKey columnNames="id_user" tableName="users" />
+
+        <addDefaultValue columnName="id_user" defaultValueComputed="nextval('users_sequence'::regclass)" tableName="users" />
+
+    </changeSet>
+
+</databaseChangeLog>

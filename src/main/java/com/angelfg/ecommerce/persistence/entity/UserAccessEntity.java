@@ -14,8 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserAccessEntity {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id_user_access", nullable = false)
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_access_sequence")
+    @SequenceGenerator(name = "user_access_sequence", sequenceName = "user_access_sequence", allocationSize = 1)
     @Column(name = "id_user_access", nullable = false)
     private Long idUserAccess;
 

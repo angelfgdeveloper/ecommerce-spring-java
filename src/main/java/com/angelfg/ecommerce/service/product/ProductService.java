@@ -8,9 +8,14 @@ import com.angelfg.ecommerce.service.dto.ListProductDTO;
 import com.angelfg.ecommerce.service.dto.ProductDTO;
 import com.angelfg.ecommerce.service.dto.ProductResponseDTO;
 import com.angelfg.ecommerce.service.exception.CustomException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,18 +44,43 @@ public class ProductService {
     @Autowired
     private ProductPageableRepository productPageableRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public ProductService() {}
 
+    // @CachePut(value = "getAll", key = "'allProducts'", cacheManager = "cacheManager") // Para decirle al cache que actualice ese dato
+    @CacheEvict(value = "getAll", key = "'allProducts'", cacheManager = "cacheManager") // Para decirle al cache que actualice algo diferente a su value
     @Secured("ROLE_USER") // Protecciones desde el service, se tiene que configurar el SecurityConfig ocn @EnableMethodSecurity
+    @Transactional
     public ProductResponseDTO save(ProductDTO productDTO, String path) {
-        ProductEntity product = productMapper.toEntity(productDTO);
-        ProductEntity newProduct = productRepository.save(product);
-        return productMapper.toEntityResponse(newProduct);
+        try {
+
+            ProductEntity product = productMapper.toEntity(productDTO);
+
+//            // Obtén el próximo valor de la secuencia antes de reiniciarla
+//            Query newQuery = entityManager.createNativeQuery("SELECT nextval('products_sequence')");
+//            Long newLastSequence = (Long) newQuery.getSingleResult();
+//
+//            // Reinicia la secuencia para que sea mayor o igual que el nuevo valor deseado
+//            Query alterSequenceQuery = entityManager.createNativeQuery("ALTER SEQUENCE products_sequence RESTART WITH " + (newLastSequence + 1));
+//            alterSequenceQuery.executeUpdate(); // Ejecuta la consulta ALTER SEQUENCE
+//
+//            // Asigna el nuevo valor de la secuencia como ID
+//            product.setIdProduct(newLastSequence);
+
+            ProductEntity newProduct = productRepository.save(product);
+            return productMapper.toEntityResponse(newProduct);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage(), HttpStatus.BAD_REQUEST, path);
+        }
     }
 
-    @Cacheable("getAll")
+    @Cacheable(value = "getAll", key = "'allProducts'", cacheManager = "cacheManager") // Para guardar cache
     public List<ProductResponseDTO> getAll() {
-        return productRepository.findAll().stream().map(productMapper::toEntityResponse).toList();
+//        return productRepository.findAll().stream().map(productMapper::toEntityResponse).toList();
+        List<ProductEntity> products = productRepository.findAll();
+        return products.stream().map(productMapper::toEntityResponse).toList();
     }
 
     public ListProductDTO getProductsPage(int page, int elements) {

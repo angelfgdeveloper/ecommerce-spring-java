@@ -15,8 +15,13 @@ import java.time.LocalDateTime;
 @ToString
 public class RoleEntity {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id_role", nullable = false)
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_sequence")
+    @SequenceGenerator(name = "roles_sequence", sequenceName = "roles_sequence", allocationSize = 1)
     @Column(name = "id_role", nullable = false)
     private Long idRole;
 

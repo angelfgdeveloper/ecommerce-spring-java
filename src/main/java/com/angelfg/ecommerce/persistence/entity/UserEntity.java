@@ -14,8 +14,13 @@ import lombok.ToString;
 @ToString
 public class UserEntity {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id_user", nullable = false)
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_sequence")
+    @SequenceGenerator(name = "users_sequence", sequenceName = "users_sequence", allocationSize = 1)
     @Column(name = "id_user", nullable = false)
     private Long idUser;
 

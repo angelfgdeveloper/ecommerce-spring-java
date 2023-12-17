@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="create_table_roles" author="Angel">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="roles" schemaName="public" />
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="roles_sequence" incrementBy="1" startValue="1" />
+
+        <createTable tableName="roles">
+
+            <column name="id_role" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="disabled" type="BOOLEAN">
+                <constraints nullable="false" />
+            </column>
+
+        </createTable>
+
+        <addPrimaryKey columnNames="id_role" tableName="roles" />
+
+        <addDefaultValue columnName="id_role" defaultValueComputed="nextval('roles_sequence'::regclass)" tableName="roles" />
+
+    </changeSet>
+
+</databaseChangeLog>

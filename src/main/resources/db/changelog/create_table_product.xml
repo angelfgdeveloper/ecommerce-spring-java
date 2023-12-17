@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="create_table_product" author="Angel">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products" schemaName="public" />
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="products_sequence" incrementBy="1" startValue="1" />
+
+        <createTable tableName="products">
+
+            <column name="id_product" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="description" type="VARCHAR(255)" />
+
+            <column name="price" type="DOUBLE">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="stock" type="INTEGER">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="available" type="BOOLEAN">
+                <constraints nullable="false" />
+            </column>
+
+        </createTable>
+
+        <addPrimaryKey columnNames="id_product" tableName="products" />
+
+        <addDefaultValue columnName="id_product" defaultValueComputed="nextval('products_sequence'::regclass)" tableName="products" />
+
+    </changeSet>
+
+</databaseChangeLog>

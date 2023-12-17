@@ -16,8 +16,19 @@ import java.util.Arrays;
 @ToString
 public class ProductEntity {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_sequence")
+//    @SequenceGenerator(name = "product_id_sequence", sequenceName = "product_id_sequence", allocationSize = 1)
+//    @Column(name = "id_product", nullable = false)
+//    private Long idProduct;
+
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id_product", nullable = false)
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_sequence")
+    @SequenceGenerator(name = "products_sequence", sequenceName = "products_sequence", allocationSize = 1)
     @Column(name = "id_product", nullable = false)
     private Long idProduct;
 
