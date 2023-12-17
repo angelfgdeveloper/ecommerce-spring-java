@@ -15,14 +15,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
 @Configuration
 @EnableMethodSecurity(securedEnabled = true) // habilitar para poder controlar las anotaciones desde los services
 public class SecurityConfig {
 
     @Autowired
     private JwtFilter jwtFilter;
+
+    private static final String[] excludedAuthPages = {
+            "/test/excludedAuthPages",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,6 +47,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/role").hasAuthority("ACCESS_VIEW_ROLES") // Es importante donde esta ubicado, porque si hay un admin antes que tenga privilegios con una ruta similar seguira entrando
                 .requestMatchers(HttpMethod.GET, "/api/privilege").hasAuthority("ACCESS_VIEW_PRIVILEGES")
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+//                .requestMatchers("/doc/**").permitAll()
+                .requestMatchers(excludedAuthPages).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
